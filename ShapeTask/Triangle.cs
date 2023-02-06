@@ -38,16 +38,30 @@
 
         public double GetArea()
         {
-            return 0.5 * GetWidth() * GetHeight();
+            double triangleSemiperimeter = GetPerimeter() / 2;
+
+            return Math.Sqrt(triangleSemiperimeter * (triangleSemiperimeter - GetSideLengthAB())
+                * (triangleSemiperimeter - GetSideLengthBC()) * (triangleSemiperimeter - GetSideLengthAC()));
         }
 
         public double GetPerimeter()
         {
-            double sideLengthAB = Math.Sqrt(Math.Pow(X2 - X1, 2) + Math.Pow(Y2 - Y1, 2));
-            double sideLengthBC = Math.Sqrt(Math.Pow(X3 - X2, 2) + Math.Pow(Y3 - Y2, 2));
-            double sideLengthAC = Math.Sqrt(Math.Pow(X3 - X1, 2) + Math.Pow(Y3 - Y1, 2));
+            return GetSideLengthAB() + GetSideLengthBC() + GetSideLengthAC();
+        }
 
-            return sideLengthAB + sideLengthBC + sideLengthAC;
+        private double GetSideLengthAB()
+        {
+            return Math.Sqrt(Math.Pow(X2 - X1, 2) + Math.Pow(Y2 - Y1, 2));
+        }
+
+        private double GetSideLengthBC()
+        {
+            return Math.Sqrt(Math.Pow(X3 - X2, 2) + Math.Pow(Y3 - Y2, 2));
+        }
+
+        private double GetSideLengthAC()
+        {
+            return Math.Sqrt(Math.Pow(X3 - X1, 2) + Math.Pow(Y3 - Y1, 2));
         }
     }
 }

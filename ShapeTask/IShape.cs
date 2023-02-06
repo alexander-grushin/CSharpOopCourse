@@ -1,6 +1,6 @@
 ﻿namespace ShapeTask
 {
-    interface IShape
+    public interface IShape
     {
         double GetWidth();
 
