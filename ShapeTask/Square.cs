@@ -28,5 +28,32 @@
         {
             return SideLength * 4;
         }
+
+        public override string ToString()
+        {
+            return $"{SideLength}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            Square square = (Square) obj;
+
+            return SideLength == square.SideLength;
+        }
+
+        public override int GetHashCode()
+        {
+            return SideLength.GetHashCode();
+        }
     }
 }

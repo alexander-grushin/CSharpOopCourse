@@ -63,5 +63,45 @@
         {
             return Math.Sqrt(Math.Pow(X3 - X1, 2) + Math.Pow(Y3 - Y1, 2));
         }
+
+        public override string ToString()
+        {
+            return $"({X1}, {Y1}), ({X2}, {Y2}), ({X3}, {Y3})";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            Triangle t = (Triangle)obj;
+
+            return X1 == t.X1 && X2 == t.X2 && X3 == t.X3 &&
+                   Y1 == t.Y1 && Y2 == t.Y2 && Y3 == t.Y3;
+        }
+
+        public override int GetHashCode()
+        {
+            const int prime = 37;
+            int hash = 1;
+
+            hash = prime * hash + X1.GetHashCode();
+            hash = prime * hash + Y1.GetHashCode();
+
+            hash = prime * hash + X2.GetHashCode();
+            hash = prime * hash + Y2.GetHashCode();
+
+            hash = prime * hash + X3.GetHashCode();
+            hash = prime * hash + Y3.GetHashCode();
+
+            return hash;
+        }
     }
 }

@@ -27,5 +27,32 @@
         {
             return Math.PI * Radius * 2;
         }
+
+        public override string ToString()
+        {
+            return $"{Radius}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            Circle circle = (Circle)obj;
+
+            return Radius == circle.Radius;
+        }
+
+        public override int GetHashCode()
+        {
+            return Radius.GetHashCode();
+        }
     }
 }
