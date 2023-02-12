@@ -2,82 +2,96 @@
 {
     public class Vector
     {
-        private int n;
+        private int size;
 
         private double[] vectorComponents;
-        
-        private int N
-        {
-            get 
-            { 
-                return n;
-            }
-            set 
-            { 
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Размерность n <= 0");
-                }    
-                else
-                {
-                    n = value;
-                }
-            }
-        }
 
         public Vector(int n)
         {
-            N = n;
-            //SetSize(n);
-            vectorComponents = new double[n];
+            SetSize(n);
+            vectorComponents = new double[n + 1];
         }
 
         public Vector(double[] vector)
         {
-            N = vector.Length;
+            SetSize(vector.Length - 1);
 
-            vectorComponents = new double[N];
-            Array.Copy(vector, vectorComponents, N);
+            vectorComponents = new double[vector.Length];
+            Array.Copy(vector, vectorComponents, vector.Length);
         }
 
         public Vector(int n, double[] vector)
         {
-            N = vector.Length;
+            SetSize(n);
 
-            if (n < N)
+            int length = vector.Length;
+
+            if (n < length)
             {
-                N = n;
+                length = n + 1;
             }
 
-            vectorComponents = new double[n];
-            Array.Copy(vector, vectorComponents, N);
+            vectorComponents = new double[n + 1];
+            Array.Copy(vector, vectorComponents, length);
         }
 
         public Vector(Vector vector)
         {
+            SetSize(vector.GetSize());
 
+            vectorComponents = new double[size + 1];
+            Array.Copy(vector.GetVectorComponents(), vectorComponents, size + 1);
         }
 
         public int GetSize()
         {
-            return n;
+            return size;
         }
-        /*
-        private void SetSize(int size)
+
+        private void SetSize(int n)
         {
-            if (size <= 0)
+            if (n <= 0)
             {
-                throw new ArgumentException("Размерность n <= 0");
+                throw new ArgumentException("Размерность вектора n <= 0.");
             }
             else
             {
-                n = size;
+                size = n;
             }
-        }*/
+        }
+
+        public double[] GetVectorComponents()
+        {
+            return vectorComponents;
+        }
+
+        public void SumToVector(Vector vector)
+        {
+
+
+            int minLength = Math.Min(vector.GetSize(), GetSize());
+
+            for (int i = 0; i < minLength; i++)
+            {
+                vectorComponents[i] = vectorComponents[i]; 
+            }
+
+        }
+
+        public double GetVectorLength()
+        {
+            double squaresSum = 0;
+
+            for (int i = 0; i <= size; i++)
+            {
+                squaresSum += vectorComponents[i] * vectorComponents[i];
+            }
+
+            return Math.Sqrt(squaresSum);
+        }
 
         public override string ToString()
         {
-            //return $"({string.Join(", ", vectorComponents)})";
             return "{" + string.Join(", ", vectorComponents) + "}";
         }
 
