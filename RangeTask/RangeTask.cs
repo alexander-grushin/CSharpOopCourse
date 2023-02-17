@@ -1,9 +1,30 @@
-﻿using System;
-
-namespace RangeTask
+﻿namespace RangeTask
 {
     internal class RangeTask
     {
+        static void PrintRanges(Range[] ranges)
+        {
+            int rangesLength = ranges.Length;
+
+            if (rangesLength == 0)
+            {
+                Console.Write("[]");
+
+                return;
+            }
+
+            Console.Write("[");
+
+            for (int i = 0; i < rangesLength - 1; i++)
+            {
+                Console.Write($"{ranges[i]}, ");
+            }
+
+            Console.Write(ranges[rangesLength - 1]);
+
+            Console.Write("]");
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Использование класса Range*.");
@@ -22,45 +43,39 @@ namespace RangeTask
             Console.WriteLine("Введите конец второго диапазона:");
             double to2 = Convert.ToDouble(Console.ReadLine());
 
+            Console.Clear();
+
             Range range2 = new Range(from2, to2);
 
-            Console.WriteLine($"Диапазон 1 = ({range1.From}, {range1.To})");
-            Console.WriteLine($"Диапазон 2 = ({range2.From}, {range2.To})");
+            Console.WriteLine($"Диапазон 1 = {range1}");
+            Console.WriteLine($"Диапазон 2 = {range2}");
             Console.WriteLine();
 
-            Range intersectionsRange = new Range();
-            intersectionsRange = range1.GetIntersections(range2);
+            Range? intersectionRange = range1.GetIntersection(range2);
 
-            if (intersectionsRange is not null)
+            if (intersectionRange is not null)
             {
-                Console.WriteLine($"Пересечения: ({intersectionsRange.From}, {intersectionsRange.To})");
+                Console.WriteLine($"Пересечения: {intersectionRange}");
             }
             else
             {
                 Console.WriteLine("Пересечения нет (Range is null).");
             }
 
-            Range[] mergerRanges = new Range[2];
-            mergerRanges = range1.GetMerger(range2);
+            Range[] unionRanges = range1.GetUnion(range2);
 
             Console.WriteLine();
-            Console.WriteLine($"Объединения:");
+            Console.Write("Объединения: ");
 
-            foreach (var range in mergerRanges)
-            {
-                Console.WriteLine($"({range.From}, {range.To})");
-            }
+            PrintRanges(unionRanges);
+            Console.WriteLine();
 
-            Range[] differenceRanges = new Range[2];
-            differenceRanges = range1.GetDifference(range2);
+            Range[] differenceRanges = range1.GetDifference(range2);
 
             Console.WriteLine();
-            Console.WriteLine($"Разность:");
+            Console.Write("Разность: ");
 
-            foreach (var range in differenceRanges)
-            {
-                Console.WriteLine($"({range.From}, {range.To})");
-            }
+            PrintRanges(differenceRanges);
         }
     }
 }

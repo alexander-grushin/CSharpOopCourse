@@ -12,10 +12,6 @@
             To = to;
         }
 
-        public Range() : this(0, 0)
-        {
-        }
-
         public double GetLength()
         {
             return To - From;
@@ -26,83 +22,59 @@
             return number >= From && number <= To;
         }
 
-        public Range GetIntersections(Range range)
+        public Range? GetIntersection(Range range)
         {
-            Range newRange = new Range();
-
-            if (range.From >= From && range.From <= To)
+            if (From >= range.To || To <= range.From)
             {
-                newRange.From = range.From;
-
-                if (range.To < To)
-                {
-                    newRange.To = range.To;
-
-                    return newRange;
-                }
-
-                newRange.To = To;
-
-                return newRange;
+                return null;
             }
 
-            return null;
+            return new Range(Math.Max(From, range.From), Math.Min(To, range.To));
         }
 
-        public Range[] GetMerger(Range range)
+        public Range[] GetUnion(Range range)
         {
-            Range[] newRanges = new Range[2];
-
-            newRanges[0] = new Range();
-            newRanges[1] = new Range();
-
             if (To < range.From || From > range.To)
             {
-                newRanges[0].From = From;
-                newRanges[0].To = To;
-                
-                newRanges[1].From = range.From;
-                newRanges[1].To = range.To;
-
-                return newRanges;
+                return new Range[] { new Range(From, To), new Range(range.From, range.To) };
             }
 
-            newRanges[0].From = Math.Min(From, range.From);
-            newRanges[0].To = Math.Max(To, range.To);
-            
-            return newRanges;
+            return new Range[] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
         }
 
         public Range[] GetDifference(Range range)
         {
-            Range[] newRanges = new Range[2];
-            
-            newRanges[0] = new Range();
-            newRanges[1] = new Range();
+            if (From > range.From || To <= range.From)
+            {
+                return new Range[] { new Range(From, To) };
+            }
 
             if (From == range.From && range.To >= To)
             {
-                return newRanges;
+                return new Range[] { };
             }
 
-            if (GetIntersections(range) is null)
+            if (From == range.From)
             {
-                newRanges[0].From = From;
-                newRanges[0].To = To;
-
-                return newRanges;
+                return new Range[] { new Range(range.To, To) };
             }
 
-            newRanges[0].From = From; 
-            newRanges[0].To = range.From;
-                
-            if (range.To < To)
+            if (To == range.To)
             {
-                newRanges[1].From = range.To;
-                newRanges[1].To = To;
+                return new Range[] { new Range(From, range.From) };
             }
 
-            return newRanges;
+            if (range.To > To)
+            {
+                return new Range[] { new Range(From, range.From) };
+            }
+
+            return new Range[] { new Range(From, range.From), new Range(range.To, To) };
+        }
+
+        public override string ToString()
+        {
+            return $"({From}; {To})";
         }
     }
 }
