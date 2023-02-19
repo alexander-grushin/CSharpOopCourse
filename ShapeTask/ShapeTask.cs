@@ -1,5 +1,5 @@
 ﻿using ShapeTask.Comparers;
-using ShapeTask.Shape;
+using ShapeTask.Classes;
 
 namespace ShapeTask
 {

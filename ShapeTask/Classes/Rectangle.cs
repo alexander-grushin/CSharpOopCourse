@@ -1,4 +1,4 @@
-﻿namespace ShapeTask.Shape
+﻿namespace ShapeTask.Classes
 {
     class Rectangle : IShape
     {
