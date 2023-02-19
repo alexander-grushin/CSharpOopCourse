@@ -1,14 +1,15 @@
-﻿namespace ShapeTask
+﻿namespace ShapeTask.Shape
 {
     class Rectangle : IShape
     {
         public double Width { get; set; }
-        public double Heigtht { get; set; }
 
-        public Rectangle(double width, double heigtht)
+        public double Height { get; set; }
+
+        public Rectangle(double width, double height)
         {
             Width = width;
-            Heigtht = heigtht;
+            Height = height;
         }
 
         public double GetWidth()
@@ -18,21 +19,22 @@
 
         public double GetHeight()
         {
-            return Heigtht;
+            return Height;
         }
+
         public double GetArea()
         {
-            return Width * Heigtht;
+            return Width * Height;
         }
 
         public double GetPerimeter()
         {
-            return (Width + Heigtht) * 2;
+            return (Width + Height) * 2;
         }
 
         public override string ToString()
         {
-            return $"{Width}, {Heigtht}";
+            return $"Type shape: Rectangle. Width = {Width}; Height = {Height}.";
         }
 
         public override bool Equals(object? obj)
@@ -49,7 +51,7 @@
 
             Rectangle rectangle = (Rectangle)obj;
 
-            return Width == rectangle.Width && Heigtht == rectangle.Heigtht;
+            return Width == rectangle.Width && Height == rectangle.Height;
         }
 
         public override int GetHashCode()
@@ -58,7 +60,7 @@
             int hash = 1;
 
             hash = prime * hash + Width.GetHashCode();
-            hash = prime * hash + Heigtht.GetHashCode();
+            hash = prime * hash + Height.GetHashCode();
 
             return hash;
         }
