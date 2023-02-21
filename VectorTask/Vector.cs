@@ -1,46 +1,60 @@
-﻿namespace VectorTask
+﻿using System;
+using System.Numerics;
+
+namespace VectorTask
 {
     public class Vector
     {
         private int size;
 
-        private double[] vectorComponents;
+        private double[] vectorComponents = Array.Empty<double>(); // под вопросом, избежать CS8618 (new double[0])
 
         public Vector(int n)
         {
             SetSize(n);
-            vectorComponents = new double[n + 1];
+
+            vectorComponents = new double[n];
         }
 
         public Vector(double[] vector)
         {
-            SetSize(vector.Length - 1);
+            int vectorLength = vector.Length;
 
-            vectorComponents = new double[vector.Length];
-            Array.Copy(vector, vectorComponents, vector.Length);
+            SetSize(vectorLength);
+
+            SetVectorComponents(vector, vectorLength);
+            /*
+            vectorComponents = new double[vectorLength];
+            Array.Copy(vector, vectorComponents, vectorLength);*/
         }
 
         public Vector(int n, double[] vector)
         {
             SetSize(n);
 
-            int length = vector.Length;
+            SetVectorComponents(vector, n);
 
-            if (n < length)
+            /*int vectorLength = vector.Length;
+            
+            if (n < vectorLength)
             {
-                length = n + 1;
+                vectorLength = n;
             }
 
-            vectorComponents = new double[n + 1];
-            Array.Copy(vector, vectorComponents, length);
-        }
+            vectorComponents = new double[n];
 
+            Array.Copy(vector, vectorComponents, vectorLength);*/
+        }
+        
         public Vector(Vector vector)
         {
             SetSize(vector.GetSize());
 
-            vectorComponents = new double[size + 1];
-            Array.Copy(vector.GetVectorComponents(), vectorComponents, size + 1);
+            SetVectorComponents(vector.GetVectorComponents(), size);
+            /*
+            vectorComponents = new double[size];
+
+            Array.Copy(vector.GetVectorComponents(), vectorComponents, size);*/
         }
 
         public int GetSize()
@@ -52,12 +66,10 @@
         {
             if (n <= 0)
             {
-                throw new ArgumentException("Размерность вектора n <= 0.");
+                throw new ArgumentException($"n must be > 0. Current value = {n}", nameof(n));
             }
-            else
-            {
-                size = n;
-            }
+
+            size = n;
         }
 
         public double[] GetVectorComponents()
@@ -65,10 +77,22 @@
             return vectorComponents;
         }
 
+        private void SetVectorComponents(double[] inputComponents, int n) // param ? or override method
+        {
+            int vectorLength = inputComponents.Length;
+
+            if (n < vectorLength)
+            {
+                vectorLength = n;
+            }
+
+            vectorComponents = new double[n];
+
+            Array.Copy(inputComponents, vectorComponents, vectorLength);
+        }
+
         public void SumToVector(Vector vector)
         {
-
-
             int minLength = Math.Min(vector.GetSize(), GetSize());
 
             for (int i = 0; i < minLength; i++)
@@ -78,16 +102,50 @@
 
         }
 
+        public void MultiplyVectorOnScalar(double scalarNumber)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                vectorComponents[i] *= scalarNumber;
+            }
+        }
+
+        public void ExpandVector()
+        {
+            for (int i = 0; i < size; i++)
+            {
+                vectorComponents[i] *= -1;
+            }
+        }
+
         public double GetVectorLength()
         {
             double squaresSum = 0;
-
-            for (int i = 0; i <= size; i++)
+            
+            for (int i = 0; i < size; i++)
             {
                 squaresSum += vectorComponents[i] * vectorComponents[i];
             }
 
             return Math.Sqrt(squaresSum);
+        }
+
+        public double? GetByIndexComponent(int index)
+        {
+            if (index >= 0 && index <= size)
+            {
+                return vectorComponents[index];
+            }
+
+            return null;
+        }
+
+        public void SetByIndexComponent(int index, double component)
+        {
+            if (index >= 0 && index <= size)
+            {
+                vectorComponents[index] = component;
+            }
         }
 
         public override string ToString()
