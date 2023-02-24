@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.Intrinsics;
-
-namespace VectorTask
+﻿namespace VectorTask
 {
     internal class VectorTask
     {
