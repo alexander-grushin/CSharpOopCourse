@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.Intrinsics;
 
 namespace VectorTask
 {
@@ -7,56 +8,105 @@ namespace VectorTask
         static void Main(string[] args)
         {
             Console.WriteLine("Тестирование программы Vector.");
-            Console.WriteLine("Тестирование Конструкторов:");
-            //1
-            Vector vector1 = new(5);
+            Console.WriteLine();
 
-            Console.WriteLine(vector1);
-            Console.WriteLine(vector1.GetSize());
+            Vector[] vectors =
+            {
+                new Vector(5),
+                new Vector(new double[] { 1, 2, 3, -4, 6 }),
+                new Vector(4, new double[] { -1, 5, 3 }),
+                new Vector(2, new double[] { -1, 5, 3 }),
+                new Vector(new Vector(new double[] { 1, 1, 1 }))
+            };
 
-            //2
-            double[] v1 = new double[] { 2, 3, -8, 10 };
+            Console.WriteLine("Тестирование создание векторов:");
 
-            Vector vector2 = new(v1);
+            foreach (Vector vector in vectors)
+            {
+                Console.WriteLine($"{vector}. Размерность = {vector.GetSize()}");
+            }
 
             Console.WriteLine();
-            Console.WriteLine(vector2);
-            Console.WriteLine(vector2.GetSize());
+
+            Console.WriteLine("Прибавление к вектору другого вектора:");
+            Console.Write($"{vectors[1]} + {vectors[2]} = ");
+
+            vectors[1].SumToVector(vectors[2]);
+            Console.WriteLine(vectors[1]);
 
             Console.WriteLine();
-            Console.WriteLine($"Длина вектора = {vector2.GetVectorLength()}");
 
-            vector2.ExpandVector();
-            Console.WriteLine($"После разворота = {vector2}");
+            Console.WriteLine("Вычитание из вектора другого вектора:");
+            Console.Write($"{vectors[1]} - {vectors[3]} = ");
+
+            vectors[1].SubtractFromVector(vectors[3]);
+            Console.WriteLine(vectors[1]);
+
+            Console.WriteLine();
+
+            double scalarNumber = 0.9;
+
+            Console.WriteLine("Умножение вектора на скаляр:");
+            Console.Write($"{vectors[1]} * {scalarNumber} = ");
+
+            vectors[1].MultiplyVectorOnScalar(scalarNumber);
+            Console.WriteLine(vectors[1]);
+
+            Console.WriteLine();
+
+            Console.WriteLine("Разворот вектора:");
+            Console.Write($"{vectors[4]} * (-1) = ");
+
+            vectors[4].ExpandVector();
+            Console.WriteLine(vectors[4]);
+
+            Console.WriteLine();
+
+            Console.WriteLine($"Получение длины вектора {vectors[3]} :");
+            Console.WriteLine(vectors[3].GetVectorLength());
+
+            Console.WriteLine();
 
             int index = 1;
-            Console.WriteLine($"Получить комномента по индеку ({index}) = [{vector2.GetByIndexComponent(index)}]");
-            Console.WriteLine($"Установить комномент по индеку ({index}):");
 
-            vector2.SetByIndexComponent(index, 25);
-            Console.WriteLine(vector2);
-
-            Console.WriteLine("Умножить вектор на скаляр (-3.45)");
-            vector2.MultiplyVectorOnScalar(-3.45);
-            Console.WriteLine(vector2);
-
-            //3
-            Vector vector3 = new(2, v1);
+            Console.WriteLine("Получение компонента вектора по индексу:");
+            Console.WriteLine($"{vectors[1]}. Задан индекс = {index}. Получен комномент => {vectors[1].GetByIndexComponent(index)}.");
 
             Console.WriteLine();
-            Console.WriteLine(vector3 + " -> 3 вид конструктора");
-            Console.WriteLine(vector3.GetSize());
 
-            //4                          0  1  2  3   4  5   6  7
-            double[] v2 = new double[] { 0, 1, 3, 6, 13, 9, 20, 2 };
-            
-            Vector vectorForCopy = new Vector(v2);
-            Vector vector4 = new(vectorForCopy);
+            double newComponent = 2.5;
+
+            Console.WriteLine("Установить компонент вектора по индексу:");
+
+            Console.Write($"{vectors[1]}. Задан индекс = {index}. Установить комномент => {newComponent}.");
+            vectors[1].SetByIndexComponent(index, newComponent);
+
+            Console.WriteLine($" Вектор = {vectors[1]}");
 
             Console.WriteLine();
-            Console.WriteLine(vector4);
-            Console.WriteLine(vector4.GetSize());
-            
+            Console.WriteLine("Статические методы:");
+
+            Console.WriteLine("Сложение двух векторов:");
+            Vector vector1 = Vector.GetSumVectorsVector(vectors[3], vectors[4]);
+
+            Console.WriteLine($"{vectors[3]} + {vectors[4]}");
+            Console.WriteLine($"Новый вектор: {vector1}. Размерность = {vector1.GetSize()}");
+
+            Console.WriteLine();
+
+            Console.WriteLine("Вычитание двух векторов:");
+            Vector vector2 = Vector.GetSubtractionVectorsVector(vectors[2], vectors[3]);
+
+            Console.WriteLine($"{vectors[2]} - {vectors[3]}");
+            Console.WriteLine($"Новый вектор: {vector2}. Размерность = {vector2.GetSize()}");
+
+            Console.WriteLine();
+
+            Console.WriteLine("Скалярное произведение векторов:");
+            Vector vector3 = Vector.GetMultiplicationVectorsVector(vectors[2], vectors[3]);
+
+            Console.WriteLine($"{vectors[2]} * {vectors[3]}");
+            Console.WriteLine($"Новый вектор: {vector3}. Размерность = {vector3.GetSize()}");
         }
     }
 }
