@@ -1,28 +1,19 @@
-﻿namespace RangeTask
+﻿using System;
+
+namespace RangeTask
 {
     internal class RangeTask
     {
-        static void PrintRanges(Range[] ranges)
+        public static void PrintRanges(Range[] ranges)
         {
-            int rangesLength = ranges.Length;
-
-            if (rangesLength == 0)
+            if (ranges.Length == 0)
             {
                 Console.Write("[]");
 
                 return;
             }
 
-            Console.Write("[");
-
-            for (int i = 0; i < rangesLength - 1; i++)
-            {
-                Console.Write($"{ranges[i]}, ");
-            }
-
-            Console.Write(ranges[rangesLength - 1]);
-
-            Console.Write("]");
+            Console.Write($"[{string.Join(", ", (object[])ranges)}]");
         }
 
         static void Main(string[] args)
@@ -55,17 +46,17 @@
 
             if (intersectionRange is not null)
             {
-                Console.WriteLine($"Пересечения: {intersectionRange}");
+                Console.WriteLine($"Пересечение: {intersectionRange}");
             }
             else
             {
-                Console.WriteLine("Пересечения нет (Range is null).");
+                Console.WriteLine("Пересечение нет (Range is null).");
             }
 
             Range[] unionRanges = range1.GetUnion(range2);
 
             Console.WriteLine();
-            Console.Write("Объединения: ");
+            Console.Write("Объединение: ");
 
             PrintRanges(unionRanges);
             Console.WriteLine();

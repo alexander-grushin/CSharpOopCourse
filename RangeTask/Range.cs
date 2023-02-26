@@ -44,32 +44,27 @@
 
         public Range[] GetDifference(Range range)
         {
-            if (From > range.From || To <= range.From)
+            if (From >= range.To || To <= range.From)
             {
                 return new Range[] { new Range(From, To) };
             }
 
-            if (From == range.From && range.To >= To)
+            if (From >= range.From && To <= range.To)
             {
                 return new Range[] { };
             }
 
-            if (From == range.From)
+            if (From < range.From && To > range.To)
             {
-                return new Range[] { new Range(range.To, To) };
+                return new Range[] { new Range(From, range.From), new Range(range.To, To) };
             }
 
-            if (To == range.To)
-            {
-                return new Range[] { new Range(From, range.From) };
-            }
-
-            if (range.To > To)
+            if (From < range.From)
             {
                 return new Range[] { new Range(From, range.From) };
             }
 
-            return new Range[] { new Range(From, range.From), new Range(range.To, To) };
+            return new Range[] { new Range(range.To, To) };
         }
 
         public override string ToString()
