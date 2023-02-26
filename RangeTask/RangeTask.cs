@@ -6,13 +6,6 @@ namespace RangeTask
     {
         public static void PrintRanges(Range[] ranges)
         {
-            if (ranges.Length == 0)
-            {
-                Console.Write("[]");
-
-                return;
-            }
-
             Console.Write($"[{string.Join(", ", (object[])ranges)}]");
         }
 
