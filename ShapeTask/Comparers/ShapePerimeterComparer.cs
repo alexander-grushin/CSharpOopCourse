@@ -1,20 +1,26 @@
-﻿using ShapeTask.Classes;
+﻿using ShapeTask.Shapes;
 
-namespace ShapeTask.Comparers
+namespace ShapeTask.Comparers;
+
+public class ShapePerimeterComparer : IComparer<IShape>
 {
-    public class ShapePerimeterComparer : IComparer<IShape>
+    public int Compare(IShape? s1, IShape? s2)
     {
-        public int Compare(IShape? s1, IShape? s2)
+        if (s1 is null && s2 is null)
         {
-            if (s1 is null || s2 is null)
-            {
-                return -1;
-            }
-
-            double shapePerimeter1 = s1.GetPerimeter();
-            double shapePerimeter2 = s2.GetPerimeter();
-
-            return shapePerimeter1.CompareTo(shapePerimeter2);
+            return 0;
         }
+
+        if (s1 is null)
+        {
+            return -1;
+        }
+
+        if (s2 is null)
+        {
+            return 1;
+        }
+
+        return s1.GetPerimeter().CompareTo(s2.GetPerimeter());
     }
 }

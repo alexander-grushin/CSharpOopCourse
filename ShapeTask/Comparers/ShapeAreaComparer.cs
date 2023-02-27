@@ -1,20 +1,26 @@
-﻿using ShapeTask.Classes;
+﻿using ShapeTask.Shapes;
 
-namespace ShapeTask.Comparers
+namespace ShapeTask.Comparers;
+
+public class ShapeAreaComparer : IComparer<IShape>
 {
-    public class ShapeAreaComparer : IComparer<IShape>
+    public int Compare(IShape? s1, IShape? s2)
     {
-        public int Compare(IShape? s1, IShape? s2)
+        if (s1 is null && s2 is null)
         {
-            if (s1 is null || s2 is null)
-            {
-                return -1;
-            }    
-
-            double shapeArea1 = s1.GetArea();
-            double shapeArea2 = s2.GetArea();
-
-            return shapeArea1.CompareTo(shapeArea2);
+            return 0;
         }
+        
+        if (s1 is null)
+        {
+            return -1;
+        }
+
+        if (s2 is null)
+        {
+            return 1;
+        }
+
+        return s1.GetArea().CompareTo(s2.GetArea());
     }
 }
