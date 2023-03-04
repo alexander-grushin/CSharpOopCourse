@@ -83,7 +83,7 @@
             Console.WriteLine("2. Удалить из списка все четные числа:");
             Console.WriteLine();
 
-            List<int> numbers1 = new List<int> { 6, 3, -4, 4, 2, 1, 1, 0, -7, 10 };
+            List<int> numbers1 = new List<int> { 6, 3, -4, 4, 2, 1, 1, 0, 7, 10 };
 
             Console.WriteLine($"Задан список чисел: {string.Join(", ", numbers1)}");
 
