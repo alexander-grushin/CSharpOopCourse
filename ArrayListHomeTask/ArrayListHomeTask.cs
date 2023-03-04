@@ -97,7 +97,7 @@ namespace ArrayListHomeTask
             Console.WriteLine("3. Создать новый список без повторений из списка с повторяющимися числами:");
             Console.WriteLine();
 
-            List<int> numbers2 = new List<int> { 3, 3, -2, 4, -2, 1, 1, 0, 7, -5, 0, 0, 7 };
+            List<int> numbers2 = new List<int> { 3, 3, -2, 4, -2, 1, 1, 0, 7, -5, 0, 0, 7, 3 };
 
             Console.WriteLine($"Задан список чисел: {string.Join(", ", numbers2)}");
 
