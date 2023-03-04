@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace ArrayListHomeTask
+﻿namespace ArrayListHomeTask
 {
     internal class ArrayListHomeTask
     {
