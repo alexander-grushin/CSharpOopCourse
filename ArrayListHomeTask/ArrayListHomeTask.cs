@@ -42,7 +42,7 @@
             }
         }
         
-        public static List<int> GetNewNumbersWithoutRepeats(List<int> numbers)
+        public static List<int> GetNumbersWithoutRepeats(List<int> numbers)
         {
             if (numbers.Count == 0)
             {
@@ -99,7 +99,7 @@
 
             Console.WriteLine($"Задан список чисел: {string.Join(", ", numbers2)}");
 
-            List<int> numbersWithoutRepeats = GetNewNumbersWithoutRepeats(numbers2);
+            List<int> numbersWithoutRepeats = GetNumbersWithoutRepeats(numbers2);
 
             Console.WriteLine($"Результат: {string.Join(", ", numbersWithoutRepeats)}");
         }
