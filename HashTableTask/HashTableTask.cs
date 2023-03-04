@@ -4,9 +4,9 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("Задача HashTable.");
 
-            HashTable test = new HashTable();
+            //HashTable test = new HashTable();
         }
     }
 }
