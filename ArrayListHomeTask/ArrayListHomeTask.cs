@@ -41,7 +41,7 @@
                 }
             }
         }
-
+        
         public static List<int> GetNewNumbersWithoutRepeats(List<int> numbers)
         {
             if (numbers.Count == 0)
