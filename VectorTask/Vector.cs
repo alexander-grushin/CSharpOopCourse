@@ -2,46 +2,52 @@
 {
     public class Vector
     {
-        private static readonly int defaultSize = 1;
+        private int size = 1; // убрать поле, так как это длина массива
 
-        private int size = defaultSize;
+        private double[] components = new double[1];
 
-        private double[] vectorComponents = new double[defaultSize];
-
-        public Vector(int n)
+        public Vector(int size)
         {
-            SetSize(n);
+            if (size <= 0)
+            {
+                throw new ArgumentException($"Size must be > 0. Current value = {size}", nameof(size));
+            }
 
-            vectorComponents = new double[size];
+            this.size = size; // этого поля не будет
+
+            //SetSize(n);
+
+            components = new double[size];
         }
 
         public Vector(double[] vector)
         {
             SetSize(vector.Length);
 
-            SetVectorComponents(vector);
+            SetComponents(vector);
         }
 
         public Vector(int n, double[] vector)
         {
             SetSize(n);
 
-            SetVectorComponents(vector);
+            SetComponents(vector);
         }
 
         public Vector(Vector vector)
         {
             SetSize(vector.GetSize());
 
-            SetVectorComponents(vector.GetVectorComponents());
+            SetComponents(vector.GetComponents());
         }
 
         public int GetSize()
         {
-            return size;
+            //return size;
+            return components.Length;
         }
 
-        private void SetSize(int n)
+        private void SetSize(int n) // не нужен
         {
             if (n <= 0)
             {
@@ -51,12 +57,12 @@
             size = n;
         }
 
-        public double[] GetVectorComponents()
+        public double[] GetComponents() // не нужен
         {
-            return vectorComponents;
+            return components;
         }
 
-        private void SetVectorComponents(double[] inputComponents)
+        private void SetComponents(double[] inputComponents) // не нужен
         {
             int vectorLength = inputComponents.Length;
 
@@ -65,15 +71,15 @@
                 vectorLength = size;
             }
 
-            vectorComponents = new double[size];
+            components = new double[size];
 
-            Array.Copy(inputComponents, vectorComponents, vectorLength);
+            Array.Copy(inputComponents, components, vectorLength);
         }
 
         public void SumToVector(Vector secondVector)
         {
             int secondVectorSize = secondVector.GetSize();
-            double[] secondVectorComponents = secondVector.GetVectorComponents();
+            double[] secondVectorComponents = secondVector.GetComponents();
 
             int maxSize = Math.Max(size, secondVectorSize);
 
@@ -89,7 +95,7 @@
 
                 if (i < size)
                 {
-                    tempElement1 = vectorComponents[i];
+                    tempElement1 = components[i];
                 }
 
                 if (i < secondVectorSize)
@@ -102,13 +108,13 @@
 
             SetSize(maxSize);
 
-            SetVectorComponents(resultVectorComponents);
+            SetComponents(resultVectorComponents);
         }
 
         public void SubtractFromVector(Vector secondVector)
         {
             int secondVectorSize = secondVector.GetSize();
-            double[] secondVectorComponents = secondVector.GetVectorComponents();
+            double[] secondVectorComponents = secondVector.GetComponents();
 
             int maxSize = Math.Max(size, secondVectorSize);
 
@@ -124,7 +130,7 @@
 
                 if (i < size)
                 {
-                    tempElement1 = vectorComponents[i];
+                    tempElement1 = components[i];
                 }
 
                 if (i < secondVectorSize)
@@ -137,14 +143,14 @@
 
             SetSize(maxSize);
 
-            SetVectorComponents(resultVectorComponents);
+            SetComponents(resultVectorComponents);
         }
 
         public void MultiplyVectorOnScalar(double scalarNumber)
         {
             for (int i = 0; i < size; i++)
             {
-                vectorComponents[i] *= scalarNumber;
+                components[i] *= scalarNumber;
             }
         }
 
@@ -152,17 +158,17 @@
         {
             for (int i = 0; i < size; i++)
             {
-                vectorComponents[i] *= -1;
+                components[i] *= -1;
             }
         }
 
-        public double GetVectorLength()
+        public double GetLength()
         {
             double squaresSum = 0;
 
             for (int i = 0; i < size; i++)
             {
-                squaresSum += vectorComponents[i] * vectorComponents[i];
+                squaresSum += components[i] * components[i];
             }
 
             return Math.Sqrt(squaresSum);
@@ -172,7 +178,7 @@
         {
             if (index >= 0 && index <= size)
             {
-                return vectorComponents[index];
+                return components[index];
             }
 
             return null;
@@ -182,14 +188,14 @@
         {
             if (index >= 0 && index <= size)
             {
-                vectorComponents[index] = component;
+                components[index] = component;
             }
         }
 
         public static Vector GetSumVectorsVector(Vector firstVector, Vector secondVector)
         {
-            double[] firstVectorComponents = firstVector.GetVectorComponents();
-            double[] secondVectorComponents = secondVector.GetVectorComponents();
+            double[] firstVectorComponents = firstVector.GetComponents();
+            double[] secondVectorComponents = secondVector.GetComponents();
 
             int firstVectorSize = firstVector.GetSize();
             int secondVectorSize = secondVector.GetSize();
@@ -224,8 +230,8 @@
 
         public static Vector GetSubtractionVectorsVector(Vector firstVector, Vector secondVector)
         {
-            double[] firstVectorComponents = firstVector.GetVectorComponents();
-            double[] secondVectorComponents = secondVector.GetVectorComponents();
+            double[] firstVectorComponents = firstVector.GetComponents();
+            double[] secondVectorComponents = secondVector.GetComponents();
 
             int firstVectorSize = firstVector.GetSize();
             int secondVectorSize = secondVector.GetSize();
@@ -260,8 +266,8 @@
 
         public static Vector GetMultiplicationVectorsVector(Vector firstVector, Vector secondVector)
         {
-            double[] firstVectorComponents = firstVector.GetVectorComponents();
-            double[] secondVectorComponents = secondVector.GetVectorComponents();
+            double[] firstVectorComponents = firstVector.GetComponents();
+            double[] secondVectorComponents = secondVector.GetComponents();
 
             int firstVectorSize = firstVector.GetSize();
             int secondVectorSize = secondVector.GetSize();
@@ -303,7 +309,7 @@
 
         public override string ToString()
         {
-            return "{" + string.Join("; ", vectorComponents) + "}";
+            return "{" + string.Join("; ", components) + "}";
         }
 
         public override bool Equals(object? obj)
@@ -325,11 +331,11 @@
                 return false;
             }
 
-            double[] checkingVectorComponents = v.GetVectorComponents();
+            double[] checkingVectorComponents = v.GetComponents();
 
             for (int i = 0; i < size; i++)
             {
-                if (!Equals(vectorComponents[i], checkingVectorComponents[i]))
+                if (!Equals(components[i], checkingVectorComponents[i]))
                 {
                     return false;
                 }
@@ -345,7 +351,7 @@
 
             hash = prime * hash + size;
 
-            foreach (double component in vectorComponents)
+            foreach (double component in components)
             {
                 hash = prime * hash + component.GetHashCode();
             }

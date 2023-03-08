@@ -41,12 +41,12 @@
 
             Console.WriteLine();
 
-            double scalarNumber = 0.9;
+            double scalar = 0.9;
 
             Console.WriteLine("Умножение вектора на скаляр:");
-            Console.Write($"{vectors[1]} * {scalarNumber} = ");
+            Console.Write($"{vectors[1]} * {scalar} = ");
 
-            vectors[1].MultiplyVectorOnScalar(scalarNumber);
+            vectors[1].MultiplyVectorOnScalar(scalar);
             Console.WriteLine(vectors[1]);
 
             Console.WriteLine();
@@ -60,7 +60,7 @@
             Console.WriteLine();
 
             Console.WriteLine($"Получение длины вектора {vectors[3]} :");
-            Console.WriteLine(vectors[3].GetVectorLength());
+            Console.WriteLine(vectors[3].GetLength());
 
             Console.WriteLine();
 

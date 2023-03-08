@@ -19,14 +19,9 @@ internal class ShapeTask
 
     public static IShape? GetSecondMaxPerimeterShape(IShape[] shapes)
     {
-        if (shapes.Length == 0)
+        if (shapes.Length < 2)
         {
             return null;
-        }
-
-        if (shapes.Length == 1)
-        {
-            return shapes[0];
         }
 
         Array.Sort(shapes, new ShapePerimeterComparer());

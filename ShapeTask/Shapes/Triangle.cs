@@ -42,10 +42,10 @@ class Triangle : IShape
         double sideBCLength = GetSideLength(X2, Y2, X3, Y3);
         double sideACLength = GetSideLength(X1, Y1, X3, Y3);
 
-        double triangleSemiPerimeter = (sideABLength + sideBCLength + sideACLength) / 2;
+        double semiPerimeter = (sideABLength + sideBCLength + sideACLength) / 2;
 
-        return Math.Sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - sideABLength)
-            * (triangleSemiPerimeter - sideBCLength) * (triangleSemiPerimeter - sideACLength));
+        return Math.Sqrt(semiPerimeter * (semiPerimeter - sideABLength)
+            * (semiPerimeter - sideBCLength) * (semiPerimeter - sideACLength));
     }
 
     public double GetPerimeter()
