@@ -1,11 +1,10 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
 
 namespace VectorTask
 {
     public class Vector
     {
-        private double[] components;// = new double[1];
+        private double[] components;
 
         public Vector(int size)
         {
@@ -47,20 +46,6 @@ namespace VectorTask
             return components.Length;
         }
 
-        /*private void SetComponents(double[] inputComponents) // не нужен
-        {
-            int vectorLength = inputComponents.Length;
-
-            if (size < vectorLength)
-            {
-                vectorLength = size;
-            }
-
-            components = new double[size];
-
-            Array.Copy(inputComponents, components, vectorLength);
-        }*/
-
         public void Add(Vector vector2)
         {
             int vectorSize1 = components.Length;
@@ -68,35 +53,39 @@ namespace VectorTask
             double[] vectorComponents2 = vector2.components;
             int vectorSize2 = vector2.components.Length;
 
-            int maxSize = vectorSize1;
+            int maxSize = Math.Max(vectorSize1, vectorSize2);
 
+            /*
             if (vectorSize1 < vectorSize2)
             {
                 //components = new double[vectorSize2];
                 maxSize = vectorSize2;
-            }
+            }*/
 
             double[] resultComponents = new double[maxSize];
 
             for (int i = 0; i < maxSize; i++)
             {
-                double components1 = 0;
-                double components2 = 0;
+                double component1 = 0;
+                double component2 = 0;
 
                 if (i < vectorSize1)
                 {
-                    components1 = components[i];
+                    component1 = components[i];
                 }
 
                 if (i < vectorSize2)
                 {
-                    components2 = vectorComponents2[i];
+                    component2 = vectorComponents2[i];
                 }
 
-                resultComponents[i] = components1 + components2;
+                resultComponents[i] = component1 + component2;
             }
 
-            components = new double[maxSize];
+            if (vectorSize2 > vectorSize1)
+            {
+                components = new double[maxSize];
+            }
 
             Array.Copy(resultComponents, components, resultComponents.Length);
         }
@@ -311,7 +300,7 @@ namespace VectorTask
 
             Vector v = (Vector)obj;
 
-            if (components.Length != v.GetSize())
+            if (components.Length != v.components.Length)
             {
                 return false;
             }
