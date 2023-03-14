@@ -33,7 +33,7 @@ namespace VectorTask
             Array.Copy(vector, components, copySize);
         }
 
-        public Vector(Vector vector)// : this(vector.components.Length) // TODO может сражу создать массив и копировать в него
+        public Vector(Vector vector)
         {
             int vectorSize2 = vector.components.Length;
 
@@ -51,79 +51,42 @@ namespace VectorTask
             int vectorSize1 = components.Length;
 
             double[] vectorComponents2 = vector2.components;
-            int vectorSize2 = vector2.components.Length;
+            int vectorSize2 = vectorComponents2.Length;
 
-            int maxSize = Math.Max(vectorSize1, vectorSize2);
-
-            /*
-            if (vectorSize1 < vectorSize2)
-            {
-                //components = new double[vectorSize2];
-                maxSize = vectorSize2;
-            }*/
-
-            double[] resultComponents = new double[maxSize];
-
-            for (int i = 0; i < maxSize; i++)
-            {
-                double component1 = 0;
-                double component2 = 0;
-
-                if (i < vectorSize1)
-                {
-                    component1 = components[i];
-                }
-
-                if (i < vectorSize2)
-                {
-                    component2 = vectorComponents2[i];
-                }
-
-                resultComponents[i] = component1 + component2;
-            }
+            int correctLength = Math.Min(vectorSize1, vectorSize2);
 
             if (vectorSize2 > vectorSize1)
             {
-                components = new double[maxSize];
+                correctLength = vectorSize2;
+                Array.Resize(ref components, correctLength);
             }
 
-            Array.Copy(resultComponents, components, resultComponents.Length);
+            for (int i = 0; i < correctLength; i++)
+            {
+                components[i] += vectorComponents2[i];
+            }
         }
 
-        /*public void SubtractFromVector(Vector secondVector)
+        public void Subtract(Vector vector2)
         {
-            int secondVectorSize = secondVector.GetSize();
-            double[] secondVectorComponents = secondVector.GetComponents();
+            int vectorSize1 = components.Length;
 
-            int maxSize = Math.Max(size, secondVectorSize);
+            double[] vectorComponents2 = vector2.components;
+            int vectorSize2 = vectorComponents2.Length;
 
-            double[] resultVectorComponents = new double[maxSize];
+            int correctLength = Math.Min(vectorSize1, vectorSize2);
 
-            double tempElement1;
-            double tempElement2;
-
-            for (int i = 0; i < maxSize; i++)
+            if (vectorSize2 > vectorSize1)
             {
-                tempElement1 = 0;
-                tempElement2 = 0;
-
-                if (i < size)
-                {
-                    tempElement1 = components[i];
-                }
-
-                if (i < secondVectorSize)
-                {
-                    tempElement2 = secondVectorComponents[i];
-                }
-
-                resultVectorComponents[i] = tempElement1 - tempElement2;
+                correctLength = vectorSize2;
+                Array.Resize(ref components, correctLength);
             }
 
-            SetSize(maxSize);
-
-            SetComponents(resultVectorComponents);
-        }*/
+            for (int i = 0; i < correctLength; i++)
+            {
+                components[i] -= vectorComponents2[i];
+            }
+        }
 
         public void MultiplyByScalar(double scalar)
         {

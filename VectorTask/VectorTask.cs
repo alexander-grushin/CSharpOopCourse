@@ -11,7 +11,7 @@
             {
                 new Vector(5),
                 new Vector(new double[] { 1, 2, 3, 4, 6 }),
-                new Vector(4, new double[] { -1, 5, 3, 1, 1, 1, 1, 6 }),
+                new Vector(4, new double[] { -1, 5, 3, 1, 1, 1, 1, 2 }),
                 new Vector(2, new double[] { -1, 5, 3 }),
                 new Vector(new Vector(new double[] { 1, 1, 1 }))
             };
@@ -33,13 +33,13 @@
             Console.WriteLine(vectors[1]);
             
             Console.WriteLine();
-            /*
+            
             Console.WriteLine("Вычитание из вектора другого вектора:");
             Console.Write($"{vectors[1]} - {vectors[3]} = ");
 
-            vectors[1].SubtractFromVector(vectors[3]);
+            vectors[1].Subtract(vectors[3]);
             Console.WriteLine(vectors[1]);
-            */
+            
             Console.WriteLine();
 
             double scalar = 1.5;
