@@ -8,7 +8,7 @@ namespace ArrayListTask
 
         private int count;
 
-        public int modCount;
+        private int modCount;
 
         private const int defaultCapasity = 10;
 
