@@ -25,25 +25,25 @@
 
             Console.WriteLine();
 
-            
+
             Console.WriteLine("Прибавление к вектору другого вектора:");
             Console.Write($"{vectors[1]} + {vectors[2]} = ");
 
             vectors[1].Add(vectors[2]);
             Console.WriteLine(vectors[1]);
-            
+
             Console.WriteLine();
-            
+
             Console.WriteLine("Вычитание из вектора другого вектора:");
             Console.Write($"{vectors[1]} - {vectors[3]} = ");
 
             vectors[1].Subtract(vectors[3]);
             Console.WriteLine(vectors[1]);
-            
+
             Console.WriteLine();
 
             double scalar = 1.5;
-            
+
             Console.WriteLine("Умножение вектора на скаляр:");
             Console.Write($"{vectors[1]} * {scalar} = ");
 
@@ -51,20 +51,20 @@
             Console.WriteLine(vectors[1]);
 
             Console.WriteLine();
-            
+
             Console.WriteLine("Разворот вектора:");
             Console.Write($"{vectors[4]} * (-1) = ");
 
             vectors[4].Reverse();
             Console.WriteLine(vectors[4]);
-            
+
             Console.WriteLine();
 
             Console.WriteLine($"Получение длины вектора {vectors[3]} :");
             Console.WriteLine(vectors[3].GetLength());
 
             Console.WriteLine();
-            
+
             int index = 1;
 
             Console.WriteLine("Получение компонента вектора по индексу:");
@@ -80,31 +80,29 @@
             vectors[1].SetComponentByIndex(index, newComponent);
 
             Console.WriteLine($" Вектор = {vectors[1]}");
-            /*
+
             Console.WriteLine();
             Console.WriteLine("Статические методы:");
 
             Console.WriteLine("Сложение двух векторов:");
-            Vector vector1 = Vector.GetSumVectorsVector(vectors[3], vectors[4]);
+            Vector vector1 = Vector.GetSum(vectors[3], vectors[4]);
 
             Console.WriteLine($"{vectors[3]} + {vectors[4]}");
             Console.WriteLine($"Новый вектор: {vector1}. Размерность = {vector1.GetSize()}");
 
             Console.WriteLine();
 
-            Console.WriteLine("Вычитание двух векторов:");
-            Vector vector2 = Vector.GetSubtractionVectorsVector(vectors[2], vectors[3]);
+            Console.WriteLine("Разность двух векторов:");
+            Vector vector2 = Vector.GetDifference(vectors[2], vectors[3]);
 
             Console.WriteLine($"{vectors[2]} - {vectors[3]}");
             Console.WriteLine($"Новый вектор: {vector2}. Размерность = {vector2.GetSize()}");
 
             Console.WriteLine();
 
-            Console.WriteLine("Скалярное произведение векторов:");
-            Vector vector3 = Vector.GetMultiplicationVectorsVector(vectors[2], vectors[3]);
+            double scalarProduct = Vector.GetProduct(vectors[2], vectors[3]);
 
-            Console.WriteLine($"{vectors[2]} * {vectors[3]}");
-            Console.WriteLine($"Новый вектор: {vector3}. Размерность = {vector3.GetSize()}");*/
+            Console.WriteLine($"Cкалярное произведение векторов: {vectors[2]} и {vectors[3]} = {scalarProduct}.");
         }
     }
 }

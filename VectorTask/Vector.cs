@@ -123,120 +123,38 @@ namespace VectorTask
             components[index] = component;
         }
 
-        /*public static Vector GetSumVectorsVector(Vector firstVector, Vector secondVector)
+        public static Vector GetSum(Vector vector1, Vector vector2)
         {
-            double[] firstVectorComponents = firstVector.GetComponents();
-            double[] secondVectorComponents = secondVector.GetComponents();
+            Vector resultVector = new Vector(vector1.components);
 
-            int firstVectorSize = firstVector.GetSize();
-            int secondVectorSize = secondVector.GetSize();
+            resultVector.Add(vector2);
 
-            int maxSize = Math.Max(firstVectorSize, secondVectorSize);
+            return resultVector;
+        }
 
-            double[] resultVectorComponents = new double[maxSize];
+        public static Vector GetDifference(Vector vector1, Vector vector2)
+        {
+            Vector resultVector = new Vector(vector1.components);
 
-            double tempElement1;
-            double tempElement2;
+            resultVector.Subtract(vector2);
 
-            for (int i = 0; i < maxSize; i++)
+            return resultVector;
+        }
+
+        public static double GetProduct(Vector vector1, Vector vector2)
+        {
+            double[] components1 = vector1.components;
+            double[] components2 = vector2.components;
+
+            double resultProduct = 0;
+
+            for (int i = 0; i < Math.Min(components1.Length, components2.Length); i++)
             {
-                tempElement1 = 0;
-                tempElement2 = 0;
-
-                if (i < firstVectorSize)
-                {
-                    tempElement1 = firstVectorComponents[i];
-                }
-
-                if (i < secondVectorSize)
-                {
-                    tempElement2 = secondVectorComponents[i];
-                }
-
-                resultVectorComponents[i] = tempElement1 + tempElement2;
+                resultProduct += components1[i] * components2[i];
             }
 
-            return new Vector(resultVectorComponents);
-        }*/
-
-        /*public static Vector GetSubtractionVectorsVector(Vector firstVector, Vector secondVector)
-        {
-            double[] firstVectorComponents = firstVector.GetComponents();
-            double[] secondVectorComponents = secondVector.GetComponents();
-
-            int firstVectorSize = firstVector.GetSize();
-            int secondVectorSize = secondVector.GetSize();
-
-            int maxSize = Math.Max(firstVectorSize, secondVectorSize);
-
-            double[] resultVectorComponents = new double[maxSize];
-
-            double tempElement1;
-            double tempElement2;
-
-            for (int i = 0; i < maxSize; i++)
-            {
-                tempElement1 = 0;
-                tempElement2 = 0;
-
-                if (i < firstVectorSize)
-                {
-                    tempElement1 = firstVectorComponents[i];
-                }
-
-                if (i < secondVectorSize)
-                {
-                    tempElement2 = secondVectorComponents[i];
-                }
-
-                resultVectorComponents[i] = tempElement1 - tempElement2;
-            }
-
-            return new Vector(resultVectorComponents);
-        }*/
-
-        /*public static Vector GetMultiplicationVectorsVector(Vector firstVector, Vector secondVector)
-        {
-            double[] firstVectorComponents = firstVector.GetComponents();
-            double[] secondVectorComponents = secondVector.GetComponents();
-
-            int firstVectorSize = firstVector.GetSize();
-            int secondVectorSize = secondVector.GetSize();
-
-            int maxSize = Math.Max(firstVectorSize, secondVectorSize);
-
-            double[] resultVectorComponents = new double[maxSize];
-
-            double tempElement1;
-            double tempElement2;
-
-            for (int i = 0; i < maxSize; i++)
-            {
-                tempElement1 = 0;
-                tempElement2 = 0;
-
-                if (i < firstVectorSize)
-                {
-                    tempElement1 = firstVectorComponents[i];
-                }
-
-                if (i < secondVectorSize)
-                {
-                    tempElement2 = secondVectorComponents[i];
-                }
-
-                if (tempElement1 == 0 || tempElement2 == 0)
-                {
-                    resultVectorComponents[i] = 0;
-                }
-                else
-                {
-                    resultVectorComponents[i] = tempElement1 * tempElement2;
-                }
-            }
-
-            return new Vector(resultVectorComponents);
-        }*/
+            return resultProduct;
+        }
 
         public override string ToString()
         {
