@@ -4,9 +4,9 @@ namespace ArrayListTask
 {
     class ArrayListTask
     {
-        public static void PrintArrayList(ArrayList<int> list)
+        public static void PrintListNumbers(ArrayList<int> numbers)
         {
-            Console.WriteLine($"[{string.Join(", ", list)}]");
+            Console.WriteLine($"[{string.Join(", ", numbers)}]");
         }
 
         static void Main(string[] args)
@@ -17,7 +17,7 @@ namespace ArrayListTask
             ArrayList<int> numbers1 = new ArrayList<int> { 1, 2, 3, -6, 0, 1, 44, 3, 6, 9, 88, 10, 0, 9, -5, 7 };
 
             Console.WriteLine($"Count = {numbers1.Count} / Capacity = {numbers1.Capacity}");
-            PrintArrayList(numbers1);
+            PrintListNumbers(numbers1);
 
             ArrayList<string> lines = new ArrayList<string>(25);
 
@@ -27,7 +27,7 @@ namespace ArrayListTask
             ArrayList<int> numbers2 = new ArrayList<int>();
 
             Console.WriteLine($"Count = {numbers2.Count} / Capacity = {numbers2.Capacity}");
-            PrintArrayList(numbers2);
+            PrintListNumbers(numbers2);
 
             Console.WriteLine();
             Console.WriteLine("Работа с операциями.");
@@ -42,7 +42,7 @@ namespace ArrayListTask
             numbers1.Add(number2);
             numbers1.Insert(index1, number1);
 
-            PrintArrayList(numbers1);
+            PrintListNumbers(numbers1);
 
             int index2 = 5;
             int number3 = 3;
@@ -53,7 +53,7 @@ namespace ArrayListTask
             numbers1.Remove(number3);
             numbers1.RemoveAt(index2);
 
-            PrintArrayList(numbers1);
+            PrintListNumbers(numbers1);
 
             Console.WriteLine();
             Console.WriteLine($"Определяем, содержит ли список число {number1} => {numbers1.Contains(number1)}");

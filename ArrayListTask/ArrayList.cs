@@ -8,6 +8,8 @@ namespace ArrayListTask
 
         private int count;
 
+        public int modCount;
+
         private const int defaultCapasity = 10;
 
         public int Capacity
@@ -99,6 +101,7 @@ namespace ArrayListTask
 
             items[Count] = item;
             count++;
+            modCount++;
         }
 
         private void IncreaseCapacity()
@@ -119,7 +122,9 @@ namespace ArrayListTask
         public void Clear()
         {
             items = new T[0];
+
             count = 0;
+            modCount = 0;
         }
 
         public bool Contains(T item)
@@ -139,8 +144,15 @@ namespace ArrayListTask
 
         public IEnumerator<T> GetEnumerator()
         {
+            int momentModCount = modCount;
+
             for (int i = 0; i < Count; i++)
             {
+                if (momentModCount != modCount)
+                {
+                    throw new InvalidOperationException($"Items during the go-round added or removed in the ArrayList.");
+                }
+
                 yield return items[i];
             }
         }
@@ -171,6 +183,7 @@ namespace ArrayListTask
 
             items[index] = item;
             count++;
+            modCount++;
         }
 
         public bool Remove(T item)
@@ -201,6 +214,8 @@ namespace ArrayListTask
 
             items[count - 1] = default;
             count--;
+
+            modCount++;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
