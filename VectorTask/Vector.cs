@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Text;
 
 namespace VectorTask
 {
@@ -16,29 +18,28 @@ namespace VectorTask
             components = new double[size];
         }
 
-        public Vector(double[] vector) : this(vector.Length)
+        public Vector(double[] vector)
         {
+            if (vector.Length <= 0)
+            {
+                throw new ArgumentException($"Count of components in the vector must be > 0. Current value = {vector.Length}", nameof(vector.Length));
+            }
+
+            components = new double[vector.Length];
+
             Array.Copy(vector, components, components.Length);
         }
 
         public Vector(int size, double[] vector) : this(size)
         {
-            int copySize = vector.Length;
-
-            if (components.Length < copySize)
-            {
-                copySize = components.Length;
-            }
-
-            Array.Copy(vector, components, copySize);
+            Array.Copy(vector, components, Math.Min(vector.Length, components.Length));
         }
 
         public Vector(Vector vector)
         {
-            int vectorSize2 = vector.components.Length;
+            components = new double[vector.components.Length];
 
-            components = new double[vectorSize2];
-            Array.Copy(vector.components, components, vectorSize2);
+            Array.Copy(vector.components, components, vector.components.Length);
         }
 
         public int GetSize()
@@ -46,45 +47,33 @@ namespace VectorTask
             return components.Length;
         }
 
-        public void Add(Vector vector2)
+        public void Add(Vector vector)
         {
-            int vectorSize1 = components.Length;
-
-            double[] vectorComponents2 = vector2.components;
-            int vectorSize2 = vectorComponents2.Length;
-
-            int correctLength = Math.Min(vectorSize1, vectorSize2);
-
-            if (vectorSize2 > vectorSize1)
+            if (vector.components.Length > components.Length)
             {
-                correctLength = vectorSize2;
-                Array.Resize(ref components, correctLength);
+                Array.Resize(ref components, vector.components.Length);
             }
 
-            for (int i = 0; i < correctLength; i++)
+            int minLength = Math.Min(components.Length, vector.components.Length);
+
+            for (int i = 0; i < minLength; i++)
             {
-                components[i] += vectorComponents2[i];
+                components[i] += vector.components[i];
             }
         }
 
-        public void Subtract(Vector vector2)
+        public void Subtract(Vector vector)
         {
-            int vectorSize1 = components.Length;
-
-            double[] vectorComponents2 = vector2.components;
-            int vectorSize2 = vectorComponents2.Length;
-
-            int correctLength = Math.Min(vectorSize1, vectorSize2);
-
-            if (vectorSize2 > vectorSize1)
+            if (vector.components.Length > components.Length)
             {
-                correctLength = vectorSize2;
-                Array.Resize(ref components, correctLength);
+                Array.Resize(ref components, vector.components.Length);
             }
 
-            for (int i = 0; i < correctLength; i++)
+            int minLength = Math.Min(components.Length, vector.components.Length);
+
+            for (int i = 0; i < minLength; i++)
             {
-                components[i] -= vectorComponents2[i];
+                components[i] -= vector.components[i];
             }
         }
 
@@ -105,9 +94,9 @@ namespace VectorTask
         {
             double squaresSum = 0;
 
-            for (int i = 0; i < components.Length; i++)
+            foreach (double component in components)
             {
-                squaresSum += components[i] * components[i];
+                squaresSum += component * component;
             }
 
             return Math.Sqrt(squaresSum);
@@ -143,17 +132,16 @@ namespace VectorTask
 
         public static double GetProduct(Vector vector1, Vector vector2)
         {
-            double[] components1 = vector1.components;
-            double[] components2 = vector2.components;
+            double result = 0;
 
-            double resultProduct = 0;
+            int minLength = Math.Min(vector1.components.Length, vector2.components.Length);
 
-            for (int i = 0; i < Math.Min(components1.Length, components2.Length); i++)
+            for (int i = 0; i < minLength; i++)
             {
-                resultProduct += components1[i] * components2[i];
+                result += vector1.components[i] * vector2.components[i];
             }
 
-            return resultProduct;
+            return result;
         }
 
         public override string ToString()
@@ -162,7 +150,7 @@ namespace VectorTask
 
             stringBuilder.AppendJoin(", ", components);
 
-            stringBuilder.Append("}");
+            stringBuilder.Append('}');
 
             return stringBuilder.ToString();
         }
@@ -179,16 +167,16 @@ namespace VectorTask
                 return false;
             }
 
-            Vector v = (Vector)obj;
+            Vector vector = (Vector)obj;
 
-            if (components.Length != v.components.Length)
+            if (components.Length != vector.components.Length)
             {
                 return false;
             }
 
             for (int i = 0; i < components.Length; i++)
             {
-                if (components[i] != v.components[i])
+                if (components[i] != vector.components[i])
                 {
                     return false;
                 }
