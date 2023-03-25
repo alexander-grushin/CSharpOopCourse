@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.Intrinsics;
-using System.Text;
+﻿using System.Text;
 
 namespace VectorTask
 {
