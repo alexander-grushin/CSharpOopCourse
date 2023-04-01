@@ -275,9 +275,9 @@ namespace ArrayListTask
             hash = prime * hash + Count;
             hash = prime * hash + Capacity;
 
-            foreach (T? item in items)
+            for (int i = 0; i < Count; i++)
             {
-                hash = prime * hash + (item != null ? item.GetHashCode() : 0);
+                hash = prime * hash + (items[i] != null ? items[i].GetHashCode() : 0);
             }
 
             return hash;
