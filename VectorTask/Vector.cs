@@ -16,21 +16,21 @@ namespace VectorTask
             components = new double[size];
         }
 
-        public Vector(double[] numbers)
+        public Vector(double[] components)
         {
-            if (numbers.Length == 0)
+            if (components.Length == 0)
             {
-                throw new ArgumentException($"Count of components in the vector must be > 0. Current value = {numbers.Length}", nameof(numbers.Length));
+                throw new ArgumentException($"Count of components in the vector must be > 0. Current value = {components.Length}", nameof(components.Length));
             }
 
-            components = new double[numbers.Length];
+            this.components = new double[components.Length];
 
-            Array.Copy(numbers, components, components.Length);
+            Array.Copy(components, this.components, this.components.Length);
         }
 
-        public Vector(int size, double[] numbers) : this(size)
+        public Vector(int size, double[] components) : this(size)
         {
-            Array.Copy(numbers, components, Math.Min(numbers.Length, components.Length));
+            Array.Copy(components, this.components, Math.Min(components.Length, this.components.Length));
         }
 
         public Vector(Vector vector)
