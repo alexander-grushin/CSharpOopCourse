@@ -1,14 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Text;
 
 namespace HashTableTask
 {
-    public class HashTable<T> : ICollection<T>
+    public class HashTable<T> : ICollection<T?>
     {
-        private List<T>[] items;
+        private const int DefaultSize = 200;
 
-        public int Count { get; }
+        private List<T?>[] items;
 
-        public bool IsReadOnly => false; // ?
+        private int modCount;
+
+        public int Count { get; private set; }
+
+        public bool IsReadOnly => false;
+
+        public HashTable()
+        {
+            items = new List<T?>[DefaultSize];
+
+            Count = 0;
+        }
 
         public HashTable(int size)
         {
@@ -17,92 +30,132 @@ namespace HashTableTask
                 throw new ArgumentException($"Size must be > 0. Current value = {size}", nameof(size));
             }
 
-            items = new List<T>[size];
+            items = new List<T?>[size];
 
             Count = size;
         }
 
-        private int GetIndex(T item)
+        private int GetIndex(T? item)
         {
             if (item == null)
             {
-                return 0; // return -1; or null?
+                return 0;
             }
 
             return Math.Abs(item.GetHashCode() % items.Length);
         }
 
-        public void Add(T item)
+        public void Add(T? item)
         {
             int index = GetIndex(item);
 
-            if (index == 0)
+            if (item == null)
             {
                 return;
             }
 
             if (items[index] == null)
             {
-                items[index] = new List<T> { item };
-
-                return;
+                items[index] = new List<T?> { item };
+                Count++;
             }
-
-            if (true) // проверка что объект уже есть ?
+            else
             {
-
+                items[index].Add(item);
+                Count++;
             }
 
-            items[index].Add(item);
+            modCount++;
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            if (Count != 0)
+            {
+                Count = 0;
+                Array.Clear(items);
+            }
         }
 
-        public bool Contains(T item)
+        public bool Contains(T? item)
         {
-            throw new NotImplementedException();
+            int index = GetIndex(item);
+
+            if (items[index] == null || item == null)
+            {
+                return false;
+            }
+
+            return items[index].Contains(item);
+
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public bool Remove(T? item)
         {
-            throw new NotImplementedException();
+            int index = GetIndex(item);
+
+            if (items[index] == null || item == null)
+            {
+                return false;
+            }
+
+            if (items[index].Count > 1)
+            {
+                items[index].Remove(item);
+            }
+            else
+            {
+                items[index] = new List<T?>();
+            }
+
+            Count--;
+            modCount++;
+
+            return true;
         }
-        
-        public IEnumerator<T> GetEnumerator()
+
+        public void CopyTo(T?[] array, int arrayIndex)
         {
-            //throw new NotImplementedException();
-            //return items[1].GetEnumerator();
+
+            //Array.Copy(items, 0, array, arrayIndex, Count);
+
+        }
+
+        public IEnumerator<T?> GetEnumerator() // TODO add modCount
+        {
+            int initialModCount = modCount;
 
             for (int i = 0; i < items.Length; i++)
             {
                 if (items[i] == null)
                 {
-                    //yield return null;
+                    //yield return default;
                     continue;
                 }
 
-                //yield return items[i];
-                
-                foreach (var item in items[i])
+                foreach (T? item in items[i])
                 {
-
                     yield return item;
                 }
             }
-
         }
 
-        public bool Remove(T item)
-        {
-            throw new NotImplementedException();
-        }
-        
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            //StringBuilder stringBuilder = new StringBuilder("[");
+
+            //stringBuilder.AppendJoin(", ", items.Where());
+
+            //stringBuilder.Append(']');
+
+            //return stringBuilder.ToString();
+
+            return "";
         }
     }
 }
