@@ -20,7 +20,7 @@ namespace VectorTask
         {
             if (components.Length == 0)
             {
-                throw new ArgumentException($"Count of components in the vector must be > 0. Current value = {components.Length}", nameof(components.Length));
+                throw new ArgumentException($"Count of components in the vector must be > 0. Current value = {components.Length}", nameof(components));
             }
 
             this.components = new double[components.Length];
