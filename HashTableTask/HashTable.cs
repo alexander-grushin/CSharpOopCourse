@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
 
 namespace HashTableTask
 {
     public class HashTable<T> : ICollection<T?>
     {
-        private const int DefaultSize = 200;
+        private const int DefaultSize = 100;
 
         private List<T?>[] items;
 
@@ -19,8 +18,6 @@ namespace HashTableTask
         public HashTable()
         {
             items = new List<T?>[DefaultSize];
-
-            Count = 0;
         }
 
         public HashTable(int size)
@@ -31,8 +28,6 @@ namespace HashTableTask
             }
 
             items = new List<T?>[size];
-
-            Count = size;
         }
 
         private int GetIndex(T? item)
@@ -49,22 +44,16 @@ namespace HashTableTask
         {
             int index = GetIndex(item);
 
-            if (item == null)
-            {
-                return;
-            }
-
             if (items[index] == null)
             {
                 items[index] = new List<T?> { item };
-                Count++;
             }
             else
             {
                 items[index].Add(item);
-                Count++;
             }
 
+            Count++;
             modCount++;
         }
 
@@ -81,7 +70,7 @@ namespace HashTableTask
         {
             int index = GetIndex(item);
 
-            if (items[index] == null || item == null)
+            if (items[index] == null)
             {
                 return false;
             }
@@ -94,12 +83,12 @@ namespace HashTableTask
         {
             int index = GetIndex(item);
 
-            if (items[index] == null || item == null)
+            if (items[index] == null)
             {
                 return false;
             }
 
-            if (items[index].Count > 1)
+            if (items[index].Count != 1)
             {
                 items[index].Remove(item);
             }
@@ -116,46 +105,120 @@ namespace HashTableTask
 
         public void CopyTo(T?[] array, int arrayIndex)
         {
+            if (array.Length - arrayIndex < Count)
+            {
+                throw new ArgumentException("Array was not long enough. Check the array index and length the array.", nameof(arrayIndex));
+            }
 
-            //Array.Copy(items, 0, array, arrayIndex, Count);
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null)
+                {
+                    items[i].CopyTo(0, array, arrayIndex, items[i].Count);
 
+                    arrayIndex += items[i].Count;
+                }
+            }
         }
 
-        public IEnumerator<T?> GetEnumerator() // TODO add modCount
+        public IEnumerator<T?> GetEnumerator()
         {
             int initialModCount = modCount;
 
             for (int i = 0; i < items.Length; i++)
             {
-                if (items[i] == null)
+                if (items[i] != null)
                 {
-                    //yield return default;
-                    continue;
-                }
+                    foreach (T? item in items[i])
+                    {
+                        if (initialModCount != modCount)
+                        {
+                            throw new InvalidOperationException("Items during the go-round added or or removed in the HashTable.");
+                        }
 
-                foreach (T? item in items[i])
-                {
-                    yield return item;
+                        yield return item;
+                    }
                 }
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
 
         public override string ToString()
         {
-            //StringBuilder stringBuilder = new StringBuilder("[");
+            StringBuilder stringBuilder = new StringBuilder("[");
 
-            //stringBuilder.AppendJoin(", ", items.Where());
+            IEnumerator<T?> iterator = GetEnumerator();
 
-            //stringBuilder.Append(']');
+            int index = 0;
 
-            //return stringBuilder.ToString();
+            while (iterator.MoveNext())
+            {
+                index++;
 
-            return "";
+                stringBuilder.Append(iterator.Current + (index != Count ? "; " : ""));
+            }
+
+            stringBuilder.Append(']');
+
+            return stringBuilder.ToString();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            if (obj is HashTable<T> hashTable)
+            {
+                if (Count != hashTable.Count || items.Length != hashTable.items.Length)
+                {
+                    return false;
+                }
+
+                IEnumerator<T?> iterator1 = GetEnumerator();
+                IEnumerator<T?> iterator2 = hashTable.GetEnumerator();
+
+                while (iterator1.MoveNext() && iterator2.MoveNext())
+                {
+                    if (!iterator1.Current.Equals(iterator2.Current))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            const int prime = 37;
+            int hash = 1;
+
+            hash = prime * hash + Count;
+            hash = prime * hash + items.Length;
+
+            IEnumerator<T?> iterator = GetEnumerator();
+
+            while (iterator.MoveNext())
+            {
+                hash = prime * hash + (iterator.Current != null ? iterator.Current.GetHashCode() : 0);
+            }
+
+            return hash;
         }
     }
 }

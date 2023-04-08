@@ -7,85 +7,42 @@ namespace HashTableTask
         static void Main(string[] args)
         {
             Console.WriteLine("Задача HashTable.");
+            Console.WriteLine();
 
-            HashTable<double?> hashTable = new HashTable<double?>(20);
+            HashTable<double?> numbersHashTable = new HashTable<double?>(40)
+            {
+                0.5,
+                0.9,
+                null,
+                0.9,
+                0.11,
+                105.6,
+                25.1,
+                null,
+                null,
+                0.91,
+                0.6
+            };
 
-            Console.WriteLine($"Кол-во HashTable = {hashTable.Count}");
-
-            hashTable.Add(null);
-            hashTable.Add(0.5);
-            hashTable.Add(0.9);
-            hashTable.Add(0.9);
-            hashTable.Add(0.1);
-            hashTable.Add(105.6);
-            hashTable.Add(25.1);
-            hashTable.Add(null);
-            hashTable.Add(0.9);
+            Console.WriteLine(numbersHashTable);
+            Console.WriteLine($"Кол-во элементов = {numbersHashTable.Count}");
+            Console.WriteLine();
 
             double number1 = 25.1;
-
-            Console.WriteLine($"Поиск в хэш-таблице - {number1}: {hashTable.Contains(number1)}");
+            Console.WriteLine($"Поиск в хэш-таблице - {number1}: {numbersHashTable.Contains(number1)}");
+            Console.WriteLine();
 
             double number2 = 0.9;
-            Console.WriteLine($"Удаление в хэш-таблице - {number2}: {hashTable.Remove(number2)}");
+            Console.WriteLine($"Удаление из хэш-таблице - {number2}: {numbersHashTable.Remove(number2)}");
 
-
-            Console.WriteLine(hashTable);
-
-            foreach (double? item in hashTable)
-            {
-                if (item == null)
-                {
-                    Console.WriteLine("null");
-                    continue;
-                }
-
-                Console.WriteLine(string.Join(", ", item));
-            }
-
+            Console.WriteLine(numbersHashTable);
+            Console.WriteLine($"Кол-во элементов = {numbersHashTable.Count}");
             Console.WriteLine();
 
+            double?[] numbers = new double?[12];
+            numbersHashTable.CopyTo(numbers, 0);
 
-
-            Console.WriteLine("///////////////////////");
-
-            List<int?>[] numbers = new List<int?>[5];
-            /*{
-                new List<int> { 1 },
-                new List<int> { 6 },
-                new List<int> { 0, 3 },
-                null,
-                null
-            };*/
-
-            numbers[1] = new List<int?> { 25 };
-
-            numbers[0] = new List<int?> { null };
-
-            if (numbers[0] == default)
-            {
-                numbers[0].Add(100);
-            }
-
-            foreach (var number in numbers)
-            {
-                if (number == null)
-                {
-                    Console.WriteLine("null");
-                    continue;
-                }
-
-                Console.WriteLine(string.Join(", ", number));
-            }
-
-            Console.WriteLine(numbers.Length);
-
-            Console.WriteLine();
-            Console.WriteLine("////////////////////");
-
-            Hashtable hash1 = new Hashtable();
-
-            Dictionary<int, string> people = new Dictionary<int, string>();
+            Console.WriteLine($"Копирует список хэш-таблицы в массив: [{string.Join("; ", numbers)}]");
         }
     }
 }
