@@ -3,26 +3,24 @@ using System.Text;
 
 namespace ArrayListTask
 {
-    class ArrayList<T> : IList<T?>
+    class ArrayList<T> : IList<T>
     {
         private const int DefaultCapacity = 10;
 
-        private T?[] items;
+        private T[] items;
 
         private int modCount;
 
         public int Capacity
         {
-            get
-            {
-                return items.Length;
-            }
+            get => items.Length;
+
             set
             {
                 if (value < Count)
                 {
-                    throw new ArgumentOutOfRangeException($"Capacity must be greater than or equal to Count of the arrayLists (Count = {Count})." +
-                        $" Current value = {value}", nameof(value));
+                    throw new ArgumentOutOfRangeException(nameof(value), $"Capacity must be greater than or equal to Count of the arrayLists (Count = {Count}). " +
+                        $"Current value = {value}");
                 }
 
                 if (value != items.Length)
@@ -39,23 +37,18 @@ namespace ArrayListTask
             }
         }
 
-        public T? this[int index]
+        public T this[int index]
         {
             get
             {
-                if (index >= Count || index < 0)
-                {
-                    throw new ArgumentOutOfRangeException($"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}", nameof(index));
-                }
+                CheckIndex(index);
 
                 return items[index];
             }
+
             set
             {
-                if (index >= Count || index < 0)
-                {
-                    throw new ArgumentOutOfRangeException($"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}", nameof(index));
-                }
+                CheckIndex(index);
 
                 items[index] = value;
                 modCount++;
@@ -75,39 +68,63 @@ namespace ArrayListTask
         {
             if (capacity < 0)
             {
-                throw new ArgumentOutOfRangeException($"Capacity must be >= 0. Current value = {capacity}", nameof(capacity));
+                throw new ArgumentOutOfRangeException(nameof(capacity), $"Capacity must be >= 0. Current value = {capacity}");
             }
 
             items = new T[capacity];
         }
 
-        public void Add(T? item)
+        private void CheckIndex(int index)
         {
-            if (Capacity == 0)
+            if (index < 0 || index > Count)
             {
-                Capacity = DefaultCapacity;
+                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}");
             }
+        }
 
-            if (Count >= items.Length)
+        public void Add(T item)
+        {
+            //if (Count >= items.Length)
+            //{
+            //    IncreaseCapacity();
+            //}
+
+            //items[Count] = item;
+            //Count++;
+            //modCount++;
+
+            Insert(Count, item);
+        }
+
+        public void Insert(int index, T item)
+        {
+            CheckIndex(index);
+
+            if (Count == Capacity)
             {
                 IncreaseCapacity();
             }
 
-            items[Count] = item;
+            Array.Copy(items, index, items, index + 1, Count - index);
+
+            items[index] = item;
             Count++;
             modCount++;
         }
 
         private void IncreaseCapacity()
         {
+            if (Capacity == 0)
+            {
+                Capacity = DefaultCapacity;
+            }
+
             Array.Resize(ref items, items.Length * 2);
         }
 
         public void TrimExcess()
         {
-            int limit = (int)(items.Length * 0.9);
-
-            if (Count < limit)
+            if (Count < items.Length * 0.9)
             {
                 Capacity = Count;
             }
@@ -117,27 +134,24 @@ namespace ArrayListTask
         {
             if (Count != 0)
             {
+                Array.Clear(items, 0, Count);
+
                 Count = 0;
-                Array.Clear(items);
+                modCount++;
             }
         }
 
-        public bool Contains(T? item)
+        public bool Contains(T item)
         {
             return IndexOf(item) >= 0;
         }
 
-        public void CopyTo(T?[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             Array.Copy(items, 0, array, arrayIndex, Count);
         }
 
-        public void CopyTo(T[] array)
-        {
-            CopyTo(array, 0);
-        }
-
-        public IEnumerator<T?> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             int initialModCount = modCount;
 
@@ -157,41 +171,12 @@ namespace ArrayListTask
             return GetEnumerator();
         }
 
-        public int IndexOf(T? item)
+        public int IndexOf(T item)
         {
             return Array.IndexOf(items, item, 0, Count);
         }
 
-        public int LastIndexOf(T? item)
-        {
-            return Array.LastIndexOf(items, item, Count - 1, Count);
-        }
-
-        public void Insert(int index, T? item)
-        {
-            if (index > Count || index < 0)
-            {
-                throw new ArgumentOutOfRangeException($"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}", nameof(index));
-            }
-
-            if (Capacity == 0)
-            {
-                Capacity = DefaultCapacity;
-            }
-
-            if (Count == Capacity)
-            {
-                IncreaseCapacity();
-            }
-
-            Array.Copy(items, index, items, index + 1, Count - index);
-
-            items[index] = item;
-            Count++;
-            modCount++;
-        }
-
-        public bool Remove(T? item)
+        public bool Remove(T item)
         {
             int index = IndexOf(item);
 
@@ -207,16 +192,14 @@ namespace ArrayListTask
 
         public void RemoveAt(int index)
         {
-            if (index >= Count || index < 0)
-            {
-                throw new ArgumentOutOfRangeException($"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}", nameof(index));
-            }
+            CheckIndex(index);
 
             if (index < Count - 1)
             {
                 Array.Copy(items, index + 1, items, index, Count - index - 1);
             }
 
+            //items[Count - 1] = default;
             items[Count - 1] = default;
             Count--;
 
@@ -245,26 +228,22 @@ namespace ArrayListTask
             {
                 return false;
             }
-
-            if (obj is ArrayList<T> arrayList)
+            ArrayList<T> arrayList = (ArrayList<T>)obj;
+            
+            if (Count != arrayList.Count)
             {
-                if (Count != arrayList.Count || Capacity != arrayList.Capacity)
+                return false;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (!Equals(items[i], arrayList[i]))
                 {
                     return false;
                 }
-
-                for (int i = 0; i < Count; i++)
-                {
-                    if (!items[i].Equals(arrayList[i]))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
             }
 
-            return false;
+            return true;
         }
 
         public override int GetHashCode()
@@ -272,12 +251,9 @@ namespace ArrayListTask
             const int prime = 37;
             int hash = 1;
 
-            hash = prime * hash + Count;
-            hash = prime * hash + Capacity;
-
             for (int i = 0; i < Count; i++)
             {
-                hash = prime * hash + (items[i] != null ? items[i].GetHashCode() : 0);
+                hash = prime * hash + (items[i]?.GetHashCode() ?? 0);
             }
 
             return hash;

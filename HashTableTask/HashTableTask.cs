@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace HashTableTask
+﻿namespace HashTableTask
 {
     internal class HashTableTask
     {
