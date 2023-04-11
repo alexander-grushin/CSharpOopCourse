@@ -76,7 +76,7 @@ namespace ArrayListTask
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index > Count)
+            if (index < 0 || index >= Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), $"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}");
             }
@@ -84,21 +84,16 @@ namespace ArrayListTask
 
         public void Add(T item)
         {
-            //if (Count >= items.Length)
-            //{
-            //    IncreaseCapacity();
-            //}
-
-            //items[Count] = item;
-            //Count++;
-            //modCount++;
-
             Insert(Count, item);
         }
 
         public void Insert(int index, T item)
         {
-            CheckIndex(index);
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be equal to Count (Count = {Count}) or within the bounds of the arrayList. " +
+                    $"Current value = {index}");
+            }
 
             if (Count == Capacity)
             {
@@ -199,8 +194,7 @@ namespace ArrayListTask
                 Array.Copy(items, index + 1, items, index, Count - index - 1);
             }
 
-            //items[Count - 1] = default;
-            items[Count - 1] = default;
+            items[Count - 1] = default!;
             Count--;
 
             modCount++;
@@ -229,7 +223,7 @@ namespace ArrayListTask
                 return false;
             }
             ArrayList<T> arrayList = (ArrayList<T>)obj;
-            
+
             if (Count != arrayList.Count)
             {
                 return false;

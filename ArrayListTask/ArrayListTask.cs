@@ -2,11 +2,6 @@
 {
     class ArrayListTask
     {
-        public static void PrintListNumbers(ArrayList<int> numbers)
-        {
-            Console.WriteLine($"[{string.Join(", ", numbers)}]");
-        }
-
         static void Main(string[] args)
         {
             Console.WriteLine("Реализация ArrayList.");
@@ -30,7 +25,7 @@
             Console.WriteLine();
             Console.WriteLine("Работа с операциями.");
 
-            int index1 = 2;
+            int index1 = 16;
             int number1 = 100;
 
             int number2 = 101;
@@ -67,7 +62,7 @@
             Console.WriteLine($"[{string.Join(", ", numbers3)}]");
 
             Console.WriteLine();
-            Console.WriteLine($"Изменить свойства Capacity и использовать метод TrimExcess:");
+            Console.WriteLine("Изменить свойства Capacity и использовать метод TrimExcess:");
 
             Console.WriteLine($"Исходный Capacity = {numbers1.Capacity} и Count = {numbers1.Count}");
 
