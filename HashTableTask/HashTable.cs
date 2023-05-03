@@ -7,7 +7,7 @@ namespace HashTableTask
     {
         private const int DefaultSize = 100;
 
-        private readonly List<T>[] items;
+        private readonly List<T>?[] lists;
 
         private int modCount;
 
@@ -17,7 +17,7 @@ namespace HashTableTask
 
         public HashTable()
         {
-            items = new List<T>[DefaultSize];
+            lists = new List<T>[DefaultSize];
         }
 
         public HashTable(int size)
@@ -27,30 +27,30 @@ namespace HashTableTask
                 throw new ArgumentException($"Size must be > 0. Current value = {size}", nameof(size));
             }
 
-            items = new List<T>[size];
+            lists = new List<T>[size];
         }
 
-        private int GetIndex(T item)
+        private int GetIndex(T? item)
         {
             if (item == null)
             {
                 return 0;
             }
 
-            return Math.Abs(item.GetHashCode() % items.Length);
+            return Math.Abs(item.GetHashCode() % lists.Length);
         }
 
         public void Add(T item)
         {
             int index = GetIndex(item);
 
-            if (items[index] == null)
+            if (lists[index] == null)
             {
-                items[index] = new List<T> { item };
+                lists[index] = new List<T> { item };
             }
             else
             {
-                items[index].Add(item);
+                lists[index]!.Add(item);
             }
 
             Count++;
@@ -61,7 +61,7 @@ namespace HashTableTask
         {
             if (Count != 0)
             {
-                foreach (List<T> item in items)
+                foreach (List<T>? item in lists)
                 {
                     item?.Clear();
                 }
@@ -73,34 +73,24 @@ namespace HashTableTask
 
         public bool Contains(T item)
         {
-            int index = GetIndex(item);
-
-            if (items[index] == null)
-            {
-                return false;
-            }
-
-            return items[index].Contains(item);
-
+            return lists[GetIndex(item)]!.Contains(item);
         }
 
         public bool Remove(T item)
         {
             int index = GetIndex(item);
 
-            if (items[index] == null)
+            if (lists[index] == null)
             {
                 return false;
             }
 
-            if (items[index].Count != 1)
+            if (!lists[index]!.Contains(item))
             {
-                items[index].Remove(item);
+                return false;
             }
-            else
-            {
-                items[index] = new List<T>();
-            }
+
+            lists[index]!.Remove(item);
 
             Count--;
             modCount++;
@@ -110,18 +100,28 @@ namespace HashTableTask
 
         public void CopyTo(T[] array, int arrayIndex)
         {
+            if (array == null)
+            {
+                throw new ArgumentNullException("Array cannot be null.");
+            }
+
+            if (arrayIndex < 0 || arrayIndex >= array.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"Index must be within the bounds of the array.");
+            }
+
             if (array.Length - arrayIndex < Count)
             {
                 throw new ArgumentException("Array was not long enough. Check the array index and length the array.", nameof(arrayIndex));
             }
 
-            for (int i = 0; i < items.Length; i++)
+            foreach (List<T>? list in lists)
             {
-                if (items[i] != null)
+                if (list != null)
                 {
-                    items[i].CopyTo(0, array, arrayIndex, items[i].Count);
+                    list.CopyTo(0, array, arrayIndex, list.Count);
 
-                    arrayIndex += items[i].Count;
+                    arrayIndex += list.Count;
                 }
             }
         }
@@ -130,15 +130,15 @@ namespace HashTableTask
         {
             int initialModCount = modCount;
 
-            for (int i = 0; i < items.Length; i++)
+            foreach (List<T>? list in lists)
             {
-                if (items[i] != null)
+                if (list != null)
                 {
-                    foreach (T item in items[i])
+                    foreach (T item in list)
                     {
                         if (initialModCount != modCount)
                         {
-                            throw new InvalidOperationException("Items during the go-round added or or removed in the HashTable.");
+                            throw new InvalidOperationException("Items during the go-round added or removed in the HashTable.");
                         }
 
                         yield return item;
@@ -156,68 +156,32 @@ namespace HashTableTask
         {
             StringBuilder stringBuilder = new StringBuilder("[");
 
-            IEnumerator<T> iterator = GetEnumerator();
-
-            int index = 0;
-
-            while (iterator.MoveNext())
+            foreach (List<T>? list in lists)
             {
-                index++;
+                if (list != null)
+                {
+                    foreach (T item in list)
+                    {
+                        if (item == null)
+                        {
+                            stringBuilder.Append("null; ");
+                        }
+                        else
+                        {
+                            stringBuilder.Append($"{item}; ");
+                        }
+                    }
+                }
+            }
 
-                stringBuilder.Append(iterator.Current + (index != Count ? "; " : ""));
+            if (Count > 0)
+            {
+                stringBuilder.Remove(stringBuilder.Length - 2, 2);
             }
 
             stringBuilder.Append(']');
 
             return stringBuilder.ToString();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(obj, this))
-            {
-                return true;
-            }
-
-            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            HashTable<T> hashTable = (HashTable<T>)obj;
-
-            if (Count != hashTable.Count)
-            {
-                return false;
-            }
-
-            IEnumerator<T> iterator1 = GetEnumerator();
-            IEnumerator<T> iterator2 = hashTable.GetEnumerator();
-
-            while (iterator1.MoveNext() && iterator2.MoveNext())
-            {
-                if (!Equals(iterator1.Current, iterator2.Current))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public override int GetHashCode()
-        {
-            const int prime = 37;
-            int hash = 1;
-
-            IEnumerator<T?> iterator = GetEnumerator();
-
-            while (iterator.MoveNext())
-            {
-                hash = prime * hash + (iterator.Current != null ? iterator.Current.GetHashCode() : 0);
-            }
-
-            return hash;
         }
     }
 }
