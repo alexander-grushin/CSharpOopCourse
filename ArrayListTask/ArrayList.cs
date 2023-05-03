@@ -19,8 +19,7 @@ namespace ArrayListTask
             {
                 if (value < Count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), $"Capacity must be greater than or equal to Count of the arrayLists (Count = {Count}). " +
-                        $"Current value = {value}");
+                    throw new ArgumentOutOfRangeException(nameof(value), $"Capacity must be >= Count (Count = {Count}). Current capacity = {value}");
                 }
 
                 if (value != items.Length)
@@ -68,7 +67,7 @@ namespace ArrayListTask
         {
             if (capacity < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(capacity), $"Capacity must be >= 0. Current value = {capacity}");
+                throw new ArgumentOutOfRangeException(nameof(capacity), $"Capacity must be >= 0. Current capacity = {capacity}");
             }
 
             items = new T[capacity];
@@ -78,7 +77,7 @@ namespace ArrayListTask
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be within the bounds of the arrayList (Count = {Count}). Current value = {index}");
+                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be >= 0 or < Count (Count = {Count}). Current index = {index}");
             }
         }
 
@@ -91,8 +90,7 @@ namespace ArrayListTask
         {
             if (index < 0 || index > Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be equal to Count (Count = {Count}) or within the bounds of the arrayList. " +
-                    $"Current value = {index}");
+                throw new ArgumentOutOfRangeException(nameof(index), $"Index must be >= 0 or <= Count (Count = {Count}). Current index = {index}");
             }
 
             if (Count == Capacity)
@@ -113,13 +111,15 @@ namespace ArrayListTask
             {
                 Capacity = DefaultCapacity;
             }
-
-            Array.Resize(ref items, items.Length * 2);
+            else
+            {
+                Capacity *= 2;
+            }
         }
 
         public void TrimExcess()
         {
-            if (Count < items.Length * 0.9)
+            if (Count < Capacity * 0.9)
             {
                 Capacity = Count;
             }
@@ -222,6 +222,7 @@ namespace ArrayListTask
             {
                 return false;
             }
+
             ArrayList<T> arrayList = (ArrayList<T>)obj;
 
             if (Count != arrayList.Count)
